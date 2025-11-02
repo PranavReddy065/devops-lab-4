@@ -3,17 +3,15 @@ pipeline {
 
     stages {
         stage('Build Hello App') {
-            agent { label 'build-node' }
             steps {
-                echo "Building Hello App on Build Node..."
+                echo "Building Hello App..."
                 sh 'mvn -f hello-app/pom.xml clean compile -DskipTests'
             }
         }
 
         stage('Test Hello App') {
-            agent { label 'test-node' }
             steps {
-                echo "Running Tests on Test Node..."
+                echo "Running Tests..."
                 sh 'mvn -f hello-app/pom.xml test'
             }
         }
@@ -21,10 +19,10 @@ pipeline {
 
     post {
         success {
-            echo 'Build & Tests completed successfully!'
+            echo '✅ Build & Tests completed successfully!'
         }
         failure {
-            echo 'Pipeline failed!'
+            echo '❌ Pipeline failed!'
         }
     }
 }
