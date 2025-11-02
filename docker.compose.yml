@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  jenkins-master:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-master
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  build-agent:
+    image: jenkins/inbound-agent
+    container_name: build-agent
+    environment:
+      - JENKINS_URL=http://jenkins-master:8080
+      - JENKINS_AGENT_NAME=build-node
+      - JENKINS_SECRET=<TO_BE_FILLED>
+
+  test-agent:
+    image: jenkins/inbound-agent
+    container_name: test-agent
+    environment:
+      - JENKINS_URL=http://jenkins-master:8080
+      - JENKINS_AGENT_NAME=test-node
+      - JENKINS_SECRET=<TO_BE_FILLED>
+
+volumes:
+  jenkins_home:
